@@ -1,5 +1,4 @@
-const configDev={
-    MONGODB_URI: 'mongodb://localhost/doantn',
+const config={
     JWT_SECRET: 'autosinh'
 };
-export default configDev;
+export default config;
