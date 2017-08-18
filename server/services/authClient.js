@@ -2,7 +2,7 @@ import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt';
 
-import Client from '../modules/client/client.model';
+import Client from '../models/client.model';
 import config from '../config/config';
 
 // local strategy
@@ -30,8 +30,8 @@ const localStrategy = new LocalStrategy(
 
 // JWT strategy
 const jwtStr = {
-    jwtFromRequest: ExtractJwt.fromAuthHeader('authorization'),
-    secretOrKey: config.JWT_SECRET,
+    jwtFromRequest: ExtractJwt.fromHeader('authorization'),
+    secretOrKey: config.JWT_SECRET
 };
 
 const jwtStrategy = new JWTStrategy(jwtStr, async (payload, done) => {

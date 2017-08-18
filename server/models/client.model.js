@@ -1,13 +1,12 @@
-import mongoose, { Schema } from 'mongoose';
-import { hashSync, compareSync } from 'bcrypt-nodejs';
+import mongoose, {Schema} from 'mongoose';
+import {hashSync, compareSync} from 'bcrypt-nodejs';
 import jwt from 'jsonwebtoken';
-import config from '../../config/config';
+import config from '../config/config';
 
 const ClientUserSchema = new Schema({
-    username:{
+    phone: {
         type: String,
-        unique: true,
-        required: [true, 'Username must required']
+        unique: true
     },
     info: {
         firstname: {
@@ -19,10 +18,6 @@ const ClientUserSchema = new Schema({
             type: String,
             required: [true, 'Last name is required'],
             trim: true
-        },
-        phone: {
-            type: String,
-            unique: true
         },
         address: {
             type: String,
@@ -68,6 +63,7 @@ const ClientUserSchema = new Schema({
             trim: true
         },
         email: {
+            type: String,
             unique: true,
             trim: true
         },
@@ -90,6 +86,7 @@ const ClientUserSchema = new Schema({
             trim: true
         },
         email: {
+            type: String,
             unique: true,
             trim: true
         },
@@ -102,48 +99,45 @@ const ClientUserSchema = new Schema({
         }
     },
     status: String // ACTIVE, DEACTIVE, SUSPENDED
-}, { timestamps: true });
+}, {timestamps: true});
 
 /*
-** setup middleware mongoose cho hanh dong SAVE thi tu dong hash pass
-*/
-ClientUserSchema.pre('save', function save(next) {
-    const user = this;
-    if (!user.isModified('local.password')) {
-        return next();
+ ** setup middleware mongoose cho hanh dong SAVE thi tu dong hash pass
+ */
+ClientUserSchema.pre('save', function(next) {
+    if (this.isModified('local.password')) {
+        this.local.password = this._hashPassword(this.local.password);
     }
-    this.local.password = this._hashPassword(this.local.password);
-
     return next();
 });
 
-ClientUserSchema.method={
+ClientUserSchema.methods = {
     _hashPassword(password){
         return hashSync(password);
     },
     authenticateClientUser(password){
-        return compareSync(password,this.local.password);
+        return compareSync(password, this.local.password);
     },
     createToken() {
         return jwt.sign(
-          {
-            _id: this._id,
-          },
-         config.JWT_SECRET,
+            {
+                _id: this._id,
+            },
+            config.JWT_SECRET,
         );
-      },
-      toAuthJSON() {
+    },
+    toAuthJSON() {
         return {
-          _id: this._id,
-          username: this.username,
-          token: `JWT ${this.createToken()}`,
+            _id: this._id,
+            email: this.local.email,
+            token: `JWT ${this.createToken()}`,
         };
-      },
-      toJSON() {
+    },
+    toJSON() {
         return {
-          _id: this._id,
-          username: this.username
+            _id: this._id,
+            username: this.username
         };
-      },
+    },
 }
-export default mongoose.model('clients',ClientUserSchema);
+export default mongoose.model('clients', ClientUserSchema);
