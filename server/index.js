@@ -36,11 +36,11 @@ config.dbconfig(mongoConf);
  */
 config.middleware(app);
 
-app.get("/", (req, res) => {
-    io.emit('connection');
-    res.status(200).send("are you ok?")
+// app.get("/", (req, res) => {
+//     io.emit('connection');
+//     res.status(200).sendFile()
 
-})
+// })
 setRouters(app); // set up router cho app
 
 const server = http.Server(app);

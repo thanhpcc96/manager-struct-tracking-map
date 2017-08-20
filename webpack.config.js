@@ -15,8 +15,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'dist'),
     filename: '[name].[chunkhash].js',
-    publicPath: '/',
-    libraryTarget: 'commonjs2',
+    publicPath: '/'
   },
   module: {
     rules: [

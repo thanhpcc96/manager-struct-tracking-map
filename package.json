@@ -27,6 +27,8 @@
     "passport-local": "^1.0.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0",
     "socket.io": "^2.0.3",
     "validator": "^6.2.1"
   },
@@ -41,8 +43,9 @@
     "html-webpack-plugin": "^2.26.0",
     "morgan": "^1.8.2",
     "nodemon": "^1.11.0",
+    "redux-logger": "^3.0.6",
     "rimraf": "^2.5.4",
-    "webpack": "2.2",
+    "webpack": "^3.5.5",
     "webpack-dev-middleware": "^1.9.0"
   }
 }
