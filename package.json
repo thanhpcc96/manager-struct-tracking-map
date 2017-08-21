@@ -7,6 +7,7 @@
   "author": "Thanh Pham and Hao Nguyen",
   "license": "MIT",
   "scripts": {
+    "build-dev": "webpack --config webpack.config.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "clean": "rimraf dist",
     "build": "cross-env NODE_ENV=production yarn run clean && webpack -p"
@@ -19,18 +20,23 @@
     "bcrypt-nodejs": "^0.0.3",
     "body-parser": "^1.15.2",
     "cross-env": "^3.1.4",
+    "crypto": "^1.0.1",
     "express": "^4.14.0",
     "jsonwebtoken": "^7.4.2",
+    "material-ui": "^0.19.0",
     "mongoose": "^4.7.6",
+    "nodemailer": "^4.0.1",
     "passport": "^0.4.0",
     "passport-jwt": "^3.0.0",
     "passport-local": "^1.0.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "socket.io": "^2.0.3",
-    "validator": "^6.2.1"
+    "validator": "^6.2.1",
+    "xoauth2": "^1.2.0"
   },
   "devDependencies": {
     "babel-loader": "^6.2.10",

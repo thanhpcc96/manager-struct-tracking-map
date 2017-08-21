@@ -1,3 +1,4 @@
+/**/
 import clientRoute from './client.router';
 
 export default app=>{

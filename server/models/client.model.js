@@ -28,7 +28,6 @@ const ClientUserSchema = new Schema({
         email: {
             type: String,
             required: [true, "email is importable and required"],
-            unique: true,
             trim: true
         },
         password: {
@@ -55,8 +54,7 @@ const ClientUserSchema = new Schema({
     facebook: {
         id: {
             type: String,
-            trim: true,
-            unique: true
+            trim: true
         },
         token: {
             type: String,
@@ -64,7 +62,6 @@ const ClientUserSchema = new Schema({
         },
         email: {
             type: String,
-            unique: true,
             trim: true
         },
         name: {
@@ -79,7 +76,6 @@ const ClientUserSchema = new Schema({
         id: {
             type: String,
             trim: true,
-            unique: true
         },
         token: {
             type: String,
@@ -87,7 +83,6 @@ const ClientUserSchema = new Schema({
         },
         email: {
             type: String,
-            unique: true,
             trim: true
         },
         name: {
@@ -136,7 +131,7 @@ ClientUserSchema.methods = {
     toJSON() {
         return {
             _id: this._id,
-            username: this.username
+            token: this.createToken()
         };
     },
 }
