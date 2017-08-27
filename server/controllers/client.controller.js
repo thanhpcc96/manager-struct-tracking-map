@@ -90,6 +90,39 @@ export async function _resetPassword(req, res) {
             return res.status(200).json({ error: false, result: await client.save() })
         }
     } catch (error) {
-
+        console.log('=====================================');
+        console.log("Lỗi ở forgot", error);
+        console.log('=====================================');
+    }
+}
+/*
+* POST Update thong tin ca nhan
+*/
+export async function _updateInfo(req, res, next){ 
+    try {
+        if(!req.client._id){
+            return res.status(400).json({error: true, message: "Ban khong co quyen"})
+        }
+        const client= await Client.findById(req.client._id);
+        if(!client){
+            return res.status(404).json({error: true, message:"khong ton tai user"})
+        }
+        client.info.firstname= client.info.firstname || req.body.firstname;
+        client.info.lastname= client.info.lastname || req.body.lastname;
+        client.info.address= client.info.address || req.body.address;
+        if(!req.body.email && req.body.email!==client.local.email){
+            let clientCheck= await Client.findOne({'local.email': req.body.email});
+            if(clientCheck) return res.status(301).json({error: true, message:"Email ton tai roi khong the them moi"})
+        }
+        client.local.email= client.local.email || req.body.email;
+        if(client._hashPassword(req.body.oldpassword)!== client.local.password){
+            return res.status(301).json({error: true, message:"Mat khau cu khong khop"})
+        }
+        client.local.password=req.body.newpassword;
+        return res.status(200).json({error: false, result: await client.save()});
+    } catch (error) {
+        console.log('=====================================');
+        console.log("Lỗi ở forgot", error);
+        console.log('=====================================');
     }
 }

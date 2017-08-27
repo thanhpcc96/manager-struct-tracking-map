@@ -42,6 +42,10 @@ const ClientUserSchema = new Schema({
                 message: '{VALUE} is not a vaidl password',
             },
         },
+        photo:{
+            type: String,
+            trim: true
+        },
         resetPasswordToken: { // danh cho khoi phuc mat khau
             type: String,
             trim: true

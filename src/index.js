@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-
-import App from './components/app'
-injectTapEventPlugin();
-
 render(
-    <App/>,
+
+    <h1>hasjpasjpaskdpoas</h1>,
     document.getElementById('root')
 );

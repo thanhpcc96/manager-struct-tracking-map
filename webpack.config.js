@@ -26,9 +26,19 @@ module.exports = {
       },
       {
         loader: ExtractTextPlugin.extract({
-          loader: 'css-loader'
+          loader: 'css-loader',
+          options:{
+            sourceMap: true,
+          }
         }),
+        include: [
+          path.resolve('./node_modules')
+        ],
         test: /\.css$/
+      },
+      {
+        test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+        loader: 'url-loader?limit=100000'
       }
     ]
   },
