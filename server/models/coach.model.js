@@ -26,4 +26,3 @@ const coachSchema= new Schema({
 },{timestamps: true});
 
 export default mongoose.model(coach,coachSchema);
-process.send()
