@@ -2,12 +2,21 @@ import express from 'express';
 import SocketIO from 'socket.io';
 import http from 'http';
 import path from 'path';
-import kue, { Redis } from 'kue'; // config worker
+import kue from 'kue'; // config worker
+import cluster from 'cluster'; // thu vien fork core cpu
+import os from 'os'; // dem so luong core cpu theo he dieu hanh, dieu phoi process
 import config from './config';
 import setRouters from './routers/';
 
+/*
+Import worker logic
+ */
+import xulyEmail from './services/workers/sendmail'
+
 const port = config.port();
 const REDIS_URL = "redis://localhost:6379";
+const numberCore = os.cpus().length;
+
 
 
 const app = express();
@@ -46,8 +55,7 @@ config.middleware(app);
 // })
 setRouters(app); // set up router cho app
 
-const server = http.Server(app);
-const io = new SocketIO(server);
+
 
 
 // io.on("connection",(socket)=>{
@@ -57,30 +65,40 @@ const io = new SocketIO(server);
 //     let client = Redis.createClient(6379, 'redis://localhost');
 //     return client;
 // }
-let jobs = kue.createQueue({
-    redis: REDIS_URL
-});
+let jobs = kue.createQueue();
 app.get('/jobs', (req, res) => {
-    let job = jobs.create('sendMail', {
-        sub: 'Dang goi chuc nang gui email'
-    }).priority('high');
-    job.on('complete', () => {
-        res.send("job completed");
-    }).on("failed", () => {
-        res.send("job completed");
-    }).on("progress", () => {
-        res.send("job completed");
-    });
-    job.save(err => {
-        if (!err) console.log(`id cong viec cua ban la ${job.id}`);
-    });
+    // let job = jobs.create('sendMail', {
+    //     sub: 'Dang goi chuc nang gui email'
+    // }).priority('high');
+    // job.on('complete', () => {
+    //     res.send("job completed");
+    // }).on("failed", () => {
+    //     res.send("job completed");
+    // }).on("progress", () => {
+    //     res.send("job completed");
+    // });
+    // job.save(err => {
+    //     if (!err) console.log(`id cong viec cua ban la ${job.id}`);
+    // });
 })
 
+const server = http.Server(app);
+const io = new SocketIO(server);
 
-app.use(kue.app);
-server.listen(port, () => {
-    console.log(`app listening on port ${port}`);
-});
+if (cluster.isMaster) {
+    app.use(kue.app);
+    server.listen(port, () => {
+        console.log(`app listening on port ${port}`);
+    });
+    for (let i = 0; i < numberCore; i++) {
+        var worker = cluster.fork();
+    }
+    console.log(` trong master`)
+} else {
+    console.log('Nhay vao worker')
+    xulyEmail();
+}
+
 app.io = io.on('connection', (socket) => {
     console.log("co ket noi " + socket)
 })
