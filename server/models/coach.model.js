@@ -22,7 +22,11 @@ const coachSchema= new Schema({
         type: Number, // 1 xe vip, 2 xe thuong
         required: true,
         default: 2
-    }   
+    },
+    photo:{
+        type: String,
+        trim: true
+    }
 },{timestamps: true});
 
 export default mongoose.model(coach,coachSchema);

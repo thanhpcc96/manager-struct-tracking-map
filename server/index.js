@@ -46,13 +46,6 @@ config.dbconfig(mongoConf);
  */
 config.middleware(app);
 
-
-
-// app.get("/", (req, res) => {
-//     io.emit('connection');
-//     res.status(200).sendFile()
-
-// })
 setRouters(app); // set up router cho app
 
 
@@ -66,21 +59,6 @@ setRouters(app); // set up router cho app
 //     return client;
 // }
 let jobs = kue.createQueue();
-app.get('/jobs', (req, res) => {
-    // let job = jobs.create('sendMail', {
-    //     sub: 'Dang goi chuc nang gui email'
-    // }).priority('high');
-    // job.on('complete', () => {
-    //     res.send("job completed");
-    // }).on("failed", () => {
-    //     res.send("job completed");
-    // }).on("progress", () => {
-    //     res.send("job completed");
-    // });
-    // job.save(err => {
-    //     if (!err) console.log(`id cong viec cua ban la ${job.id}`);
-    // });
-})
 
 const server = http.Server(app);
 const io = new SocketIO(server);

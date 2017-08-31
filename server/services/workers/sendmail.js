@@ -5,7 +5,7 @@ const jobs = kue.createQueue({ // tao backgroud jobs trong database redis dang c
 });
 export default function xulyEmail() {
     jobs.process('sendMail', (job, done) => {
-        console.log(` data cua email la: ${job.data.toString()}`);
+        console.log(` data cua email la: ${job.data}`);
         /*
             option dang:{
                     from: 'Hai Au copany <services.haiaucompany@gmail.com>',
