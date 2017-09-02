@@ -7,7 +7,7 @@ const UserSchema = new Schema({
     },
     password: {
         type: String,
-        required:[true,"Mat khau la bat buoc!"]
+        required: [true, "Mat khau la bat buoc!"]
     },
     info: {
         firstname: {
@@ -24,15 +24,15 @@ const UserSchema = new Schema({
             type: String,
             trim: true
         },
-        passportNumber:{
+        passportNumber: {
             type: String,
             trim: true,
             unique: true
         },
-        phoneNumber:{
+        phoneNumber: {
             type: String
         },
-        photoProfile:{
+        photoProfile: {
             type: String,
             trim: true
         },
@@ -45,34 +45,35 @@ const UserSchema = new Schema({
     resetPasswordExpires: {
         type: Date
     },
-    role:{
+    role: {
         type: Number, // 1 la nhan vien phu xe, 2 lai xe, 3 nhan vien giam sat, 
         default: 1
     },
     status: String // ACTIVE, DEACTIVE, SUSPENDED
-}, {timestamps: true});
+}, { timestamps: true });
 
 /*
  ** setup middleware mongoose cho hanh dong SAVE thi tu dong hash pass
  */
-ClientUserSchema.pre('save', function(next) {
+UserSchema.pre('save', function (next) {
     if (this.isModified('password')) {
         this.password = this._hashPassword(this.password);
     }
     return next();
 });
 
-ClientUserSchema.methods = {
-    _hashPassword(password){
+UserSchema.methods = {
+    _hashPassword(password) {
         return hashSync(password);
     },
-    authenticateClientUser(password){
-        return compareSync(password, this.local.password);
+    authenticateUser(password) {
+        return compareSync(password, this.password);
     },
     createToken() {
         return jwt.sign(
             {
                 _id: this._id,
+                role: this.role
             },
             config.JWT_SECRET,
         );
@@ -91,4 +92,4 @@ ClientUserSchema.methods = {
         };
     },
 }
-export default mongoose.model('clients', ClientUserSchema);
+export default mongoose.model('users',UserSchema);
