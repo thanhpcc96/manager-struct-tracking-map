@@ -24,16 +24,18 @@ export function _postCreateNewUser(req, res, next) {
                         address: req.body.address,
                         passportNumber: req.body.passportNumber,
                         phoneNumber: req.body.phoneNumber,
-                        photoProfile: req.body.urlPhoto
+                        photoProfile: []
                     },
                     role: req.body.role,
                     status: 'ACTIVE'
                 }
-                return res.status(200).json({ err: false, result: await UserModel.create(newUser) });
+                let user = await UserModel.create(newUser);
+                res.status(200).json({ err: false, result: user });
+                next(user._id.toString());
             } else {
-                return res.status(301).json({ err: true, message: 'Nhan vien nay ton tai roi' });
+                res.status(301).json({ err: true, message: 'Nhan vien nay ton tai roi' });
+                next(new Error('Nhan vien ton tai'));
             }
-            next();
         }
     } catch (err) {
         return res.status(503).json({ err: true, message: 'loi phia he thong ' + err });
@@ -46,7 +48,11 @@ export async function _postUpdateInfo(req, res, next) {
         userCurrent.info.firtname = userCurrent.info.firtname || req.body.firtname;
         userCurrent.info.lastname = userCurrent.info.lastname || req.body.lastname;
         userCurrent.info.address = userCurrent.info.address || req.body.address;
-        return res.status(200).json({ err: false, result: await userCurrent.save() });
+        req.files.forEach(function(item) {
+            userCurrent.info.photoProfile.push(""+item.destination+item.filename)
+        });
+        res.status(200).json({ err: false, result: await userCurrent.save() });
+        next();
     } catch (err) {
         return res.status(503).json({ err: true, message: 'Loi he thong ' + err });
     }

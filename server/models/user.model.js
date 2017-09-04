@@ -33,8 +33,7 @@ const UserSchema = new Schema({
             type: String
         },
         photoProfile: {
-            type: String,
-            trim: true
+            type: Array
         },
 
     },
