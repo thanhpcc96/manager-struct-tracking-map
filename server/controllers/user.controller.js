@@ -31,10 +31,9 @@ export function _postCreateNewUser(req, res, next) {
                 }
                 let user = await UserModel.create(newUser);
                 res.status(200).json({ err: false, result: user });
-                next(user._id.toString());
+                next();
             } else {
-                res.status(301).json({ err: true, message: 'Nhan vien nay ton tai roi' });
-                next(new Error('Nhan vien ton tai'));
+                return res.status(301).json({ err: true, message: 'Nhan vien nay ton tai roi' });
             }
         }
     } catch (err) {
@@ -48,8 +47,8 @@ export async function _postUpdateInfo(req, res, next) {
         userCurrent.info.firtname = userCurrent.info.firtname || req.body.firtname;
         userCurrent.info.lastname = userCurrent.info.lastname || req.body.lastname;
         userCurrent.info.address = userCurrent.info.address || req.body.address;
-        req.files.forEach(function(item) {
-            userCurrent.info.photoProfile.push(""+item.destination+item.filename)
+        req.files.forEach(function (item) {
+            userCurrent.info.photoProfile.push("" + item.destination + item.filename)
         });
         res.status(200).json({ err: false, result: await userCurrent.save() });
         next();
