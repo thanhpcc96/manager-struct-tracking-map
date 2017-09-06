@@ -1,5 +1,5 @@
-import mongoose, {Schema} from 'mongoose';
-import {hashSync, compareSync} from 'bcrypt-nodejs';
+import mongoose, { Schema } from 'mongoose';
+import { hashSync, compareSync } from 'bcrypt-nodejs';
 import jwt from 'jsonwebtoken';
 import config from '../config/config';
 
@@ -42,7 +42,7 @@ const ClientUserSchema = new Schema({
                 message: '{VALUE} is not a vaidl password',
             },
         },
-        photo:{
+        photo: {
             type: String,
             trim: true
         },
@@ -97,13 +97,17 @@ const ClientUserSchema = new Schema({
             trim: true
         }
     },
+    scoreFriendly: {
+        type: Number,
+        default: 10
+    },
     status: String // ACTIVE, DEACTIVE, SUSPENDED
-}, {timestamps: true});
+}, { timestamps: true });
 
 /*
  ** setup middleware mongoose cho hanh dong SAVE thi tu dong hash pass
  */
-ClientUserSchema.pre('save', function(next) {
+ClientUserSchema.pre('save', function (next) {
     if (this.isModified('local.password')) {
         this.local.password = this._hashPassword(this.local.password);
     }
@@ -111,10 +115,10 @@ ClientUserSchema.pre('save', function(next) {
 });
 
 ClientUserSchema.methods = {
-    _hashPassword(password){
+    _hashPassword(password) {
         return hashSync(password);
     },
-    authenticateClientUser(password){
+    authenticateClientUser(password) {
         return compareSync(password, this.local.password);
     },
     createToken() {

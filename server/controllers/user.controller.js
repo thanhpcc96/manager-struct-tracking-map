@@ -40,7 +40,7 @@ export function _postCreateNewUser(req, res, next) {
         return res.status(503).json({ err: true, message: 'loi phia he thong ' + err });
     }
 }
-export async function _postUpdateInfo(req, res, next) {
+export function _postUpdateInfo(req, res, next) {
     try {
         const userCurrent = req.user;
         userCurrent.password = req.body.password;
@@ -56,4 +56,15 @@ export async function _postUpdateInfo(req, res, next) {
         return res.status(503).json({ err: true, message: 'Loi he thong ' + err });
     }
 }
-
+export function _postDangKiLichLamViec(req, res, next) {
+    try {
+        const user= req.user;
+        let role= user.role;
+        if( role===1 && role ===2 ){
+            
+        }
+    } catch (err) {
+        
+    }
+    
+}

@@ -45,7 +45,7 @@ const UserSchema = new Schema({
         type: Date
     },
     role: {
-        type: Number, // 1 la nhan vien phu xe, 2 lai xe, 3 nhan vien giam sat, 
+        type: Number, // 1 la nhan vien phu xe, 2 lai xe, 3 nhan vien giam sat, 4 nhan vien kiem toan, 5 quan ly
         default: 1
     },
     status: String // ACTIVE, DEACTIVE, SUSPENDED
